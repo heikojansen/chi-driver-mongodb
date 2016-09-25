@@ -1,4 +1,7 @@
 package CHI::Driver::MongoDB::t::CHIDriverTests;
+
+# ABSTRACT: Wrapper for the CHI driver test suite
+
 use strict;
 use warnings;
 use CHI::Test;
