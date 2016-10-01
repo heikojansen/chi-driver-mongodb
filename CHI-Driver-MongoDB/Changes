@@ -1,5 +1,6 @@
 
 {{$NEXT}}
+	- Skip tests unless a MongoDB server is available
 
 0.00_01   2016-09-25 20:56:57+02:00 Europe/Berlin (TRIAL RELEASE)
 	- First release
