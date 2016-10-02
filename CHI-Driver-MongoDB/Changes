@@ -1,5 +1,6 @@
 
 {{$NEXT}}
+	- Fix tests for Perl 5.8.x (do not use "defined-or" operator)
 
 0.0001    2016-10-01 21:00:56+02:00 Europe/Berlin
 	- Skip tests unless a MongoDB server is available

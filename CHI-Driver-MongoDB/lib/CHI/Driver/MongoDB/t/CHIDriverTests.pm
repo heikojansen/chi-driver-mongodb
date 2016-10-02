@@ -22,7 +22,7 @@ sub new_cache_options {
 		$self->SUPER::new_cache_options(),
 
 		# Any necessary CHI->new parameters for your test driver
-		connection_uri => $ENV{'MONGODB_CONNECTION_URI'} // 'mongodb://127.0.0.1:27017',
+		connection_uri => defined( $ENV{'MONGODB_CONNECTION_URI'} ) ? $ENV{'MONGODB_CONNECTION_URI'} : 'mongodb://127.0.0.1:27017',
 		db_name        => '_CHI_TESTING_',
 	);
 }
