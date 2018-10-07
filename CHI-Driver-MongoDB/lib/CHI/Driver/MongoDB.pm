@@ -5,9 +5,10 @@ package CHI::Driver::MongoDB;
 
 use Moo;
 use MongoDB;
+use BSON;
+use BSON::Types qw( bson_bytes bson_time );
 use URI::Escape::XS;
 use Try::Tiny;
-use Time::Moment;
 
 use strict;
 use warnings;
@@ -55,10 +56,8 @@ sub BUILD {
 			delete $params->{$param};
 		}
 	}
-	my $codec = MongoDB::BSON->new( dt_type => 'Time::Moment' );
 
 	my %options = (
-		bson_codec => $codec,
 		%{ $self->mongodb_options() },
 		%{ $self->non_common_constructor_params($params) },
 	);
@@ -132,10 +131,10 @@ sub store {
 	$key = encodeURIComponent($key);
 	my $doc = {
 		_id     => $key,
-		payload => MongoDB::BSON::Binary->new( data => $data ),
+		payload => bson_bytes($data),
 	};
 	if ( defined $expires_in ) {
-		$doc->{'expireAt'} = Time::Moment->from_epoch( time() + $expires_in );
+		$doc->{'expireAt'} = bson_time( time() + $expires_in );
 	}
 	my $result = $self->_coll->update_one( { _id => $key }, { '$set' => $doc }, { upsert => 1 } );
 
