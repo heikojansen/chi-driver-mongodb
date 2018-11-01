@@ -221,11 +221,11 @@ __END__
 
 =head1 WARNING
 
-This module is currently considered to be a B<beta release>.
+Because of the not fully understood test failures this module is
+still considered to be a B<beta release>.
 
-While the (mostly) succeeding test suite shows that there probably
-are no major issues endangering your data it has only been tested
-with MongoDB 3.2.x and the MongoDB Perl module v1.4.5.
+On the other hand I have never received any reports - which either
+means that nobody uses it or that it does work as intended ;-)
 
 Please open a bug report on L<https://rt.perl.org/> or send me a
 mail if you encounter any problems.
