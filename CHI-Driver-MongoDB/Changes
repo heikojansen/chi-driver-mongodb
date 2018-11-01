@@ -1,5 +1,7 @@
 
 {{$NEXT}}
+
+0.0100    2018-11-01 18:56:10+01:00 Europe/Berlin
 	- Fix tests for Perl 5.8.x (do not use "defined-or" operator)
 	- Update dependency and fix compatibility to MongoDB > 2.0
 
