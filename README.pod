@@ -1,0 +1,137 @@
+=pod
+
+=encoding utf-8
+
+=head1 WARNING
+
+Because of the not fully understood test failures this module is
+still considered to be a B<beta release>.
+
+On the other hand I have never received any reports - which either
+means that nobody uses it or that it does work as intended ;-)
+
+Please open a bug report on L<https://rt.perl.org/> or send me a
+mail if you encounter any problems.
+
+=head1 SYNOPSIS
+
+    use CHI;
+ 
+    my $cache = CHI->new (
+        driver          => 'MongoDB',
+        namespace       => 'foo',
+        # optional, default: _CHI_
+        db_name         => '...',
+        # optional, default: mongodb://127.0.0.1:27017
+        connection_uri  => '...',
+        # optional
+        mongodb_options => { ... },
+    );
+
+=head1 DESCRIPTION
+
+Driver to use L<MongoDB> as storage back end for L<CHI>.
+
+L<CHI> C<namespace>s are translated to L<MongoDB> collections, so you 
+can use the same database name for all CHI instances (or simply use 
+the default and omit the parameter).
+
+The driver supports the C<expires_on_backend> option, but be aware that
+the expiration actually happens within a short but unspecified time 
+frame B<after> the exact expiration timeout (cf. L</"FAILING TESTS">).
+
+By default the MongoDB server is expected to be available on localhost,
+port 27017. Pass the C<connection_uri> param to override this.
+For testing purposes, set the C<MONGODB_CONNECTION_URI> environment
+variable.
+
+=head1 CONSTRUCTOR OPTIONS
+
+=over 4
+
+=item C<connection_uri>: String
+
+Where the MongoDB server is listening. By default, 
+C<mongodb://127.0.0.1:27017> is used.
+
+See L<MongoDB::MongoClient/"CONNECTION-STRING-URI"> for details.
+
+=item C<db_name>: String
+
+The database name inside MongoDB. Defaults to C<_CHI_>.
+The name is arbitrary but should of course not clash with your other
+databases.
+
+=item C<mongodb_options>: HASHREF
+
+Arbitrary options which are passed to the constructor of the underlying
+L<MongoDB::MongoClient> object.
+
+=back
+
+=head1 FAILING TESTS
+
+Currently, you should expect four failing tests from the CHI test suite:
+94, 205-206, 904.
+
+=over 4
+
+=item B<94>: C<Failed test 'threw Regexp ((?^:discard timeout .* reached))'>
+
+I do not know yet, why the test functions succeeds while it is supposed
+to C<die>.
+
+=item B<205>: C<Failed test 'cannot get_object(key0) after expire'>
+
+=item B<206>: C<Failed test 'cannot get_object(key1) after expire'>
+
+MongoDB uses a dedicated thread to remove documents whose lifetime has
+expired. It checks the stored documents periodically but that means
+there is a short period of time between the moment a document expires
+and the moment it is actually removed.
+This should be no problem for our caching purposes but is the reason
+why these tests fail.
+
+=item B<904> C<Failed test 'test_serializers died (Insecure dependency in eval while running with -T switch...>
+
+No idea yet what is wrong here.
+
+=back
+
+Fixing the second and third failing test may not be possible at all,
+but I haven't yet found a way to disable indiviual tests.
+
+Other than these four, 944 subtests succeed while 67 are skipped.
+
+I have seen test runs where for some unknown reason a large number of
+tests fail. I do not know why that happens. The MongoDB database is
+dropped and recreated on every run of the test suite.
+On simply re-running the whole test usually only the four tests shown
+above fail.
+
+=head1 TODO
+
+In no particular order:
+
+=over 4
+
+=item Allow passing in a preconfigured L<MongoDB> object.
+
+=item Allow using L<Mango> instead of L<MongoDB>.
+
+=item Implement C<store_multi ( $key_data, $options )> method.
+
+=item Implement LRU discard policy.
+
+=item Implement support for size awareness in the back end.
+
+B<Caveat>: As of version 3.2 MongoDB supports collections that either
+have a finite size (in bytes or in number of stored documents) or 
+support the automatic expiration handling but not both!
+
+=back
+
+=head1 SEE ALSO
+
+L<CHI>, L<CHI::Driver::Development>, L<MongoDB>
+

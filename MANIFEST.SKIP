@@ -1,7 +1,9 @@
 \.SKIP$
+chi_usage.txt
 dist.ini
 ~$
 .gitignore
 cpanfile
 cpanfile.snapshot
 local/
+README.pod

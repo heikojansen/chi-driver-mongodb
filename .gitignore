@@ -1,7 +1,7 @@
 *~
 .*.swp
-CHI-Driver-MongoDB/CHI-Driver-MongoDB-*/
-CHI-Driver-MongoDB/CHI-Driver-MongoDB-*.tar.gz
-CHI-Driver-MongoDB/cpanfile.snapshot
-CHI-Driver-MongoDB/local/
+CHI-Driver-MongoDB-*/
+CHI-Driver-MongoDB-*.tar.gz
+cpanfile.snapshot
+local/
 chi_usage.txt
