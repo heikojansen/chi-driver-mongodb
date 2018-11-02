@@ -11,3 +11,4 @@ requires "Data::Serializer", "0";
 requires "Test::Class", "0";
 requires "Date::Parse", "0";
 requires "Test::Warn", "0";
+requires "Try::Tiny", "0";
